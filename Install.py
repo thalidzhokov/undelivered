@@ -2,7 +2,9 @@
 # coding: utf8
 
 # Imports
-import os, pymysql, Conf
+import os
+import pymysql
+import Conf
 
 # MySQL
 file = open('Install.sql')
