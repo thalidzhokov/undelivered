@@ -5,15 +5,7 @@
 # */10 * * * * cd /home/PATH_TO/undelivered && /usr/bin/python Cron.py >> Cron.log
 
 # Imports
-import datetime
-import imaplib
-import re
-
-import lepl.apps.rfc3696
-import pymysql
-
-import Conf
-import Functions
+import datetime, imaplib, re, lepl.apps.rfc3696, pymysql, Conf, Functions
 
 dateForTimestamp = '{:%Y-%m-%d %H:%M:%S}'.format(datetime.datetime.now())
 date = (datetime.date.today() - datetime.timedelta(1)).strftime("%d-%b-%Y")
