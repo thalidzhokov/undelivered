@@ -1,0 +1,22 @@
+#!/usr/bin/python
+# coding: utf8
+
+# Imports
+import os
+
+# Configuration
+PATH = os.path.dirname(os.path.abspath(__file__))
+READONLY = True  # If is test use True
+COUNT = 10
+
+# IMAP
+IMAP_SERVER = ''
+IMAP_PORT = 993
+IMAP_LOGIN = ''
+IMAP_PASSWORD = ''
+
+# MySQL
+DB_HOST = 'localhost'
+DB_USER = ''
+DB_PASSWORD = ''
+DB_NAME = ''
