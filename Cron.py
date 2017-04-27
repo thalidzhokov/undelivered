@@ -13,6 +13,7 @@ import pymysql
 import Conf
 import Functions
 
+
 dateForTimestamp = '{:%Y-%m-%d %H:%M:%S}'.format(datetime.datetime.now())
 date = (datetime.date.today() - datetime.timedelta(1)).strftime("%d-%b-%Y")
 emailValidator = lepl.apps.rfc3696.Email()
@@ -78,10 +79,10 @@ if sql:
     try:
         cursor.execute(sql)
     except:
-        print('ERROR!', sql)
+        print('%s ERROR!' % (dateForTimestamp), sql)
         pass
 
     db.commit()
     db.close()
 else:
-    print('EMPTY sql')
+    print('%s EMPTY sql' % (dateForTimestamp))
