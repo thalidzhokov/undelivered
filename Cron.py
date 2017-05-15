@@ -79,10 +79,11 @@ if sql:
     try:
         cursor.execute(sql)
     except:
-        print('%s ERROR!' % (dateForTimestamp), sql)
+        print('%s ERROR! %s' % (dateForTimestamp, sql))
         pass
 
     db.commit()
     db.close()
 else:
     print('%s EMPTY sql' % (dateForTimestamp))
+
