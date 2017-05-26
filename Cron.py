@@ -7,7 +7,6 @@
 # Imports
 import datetime
 import imaplib
-import re
 import lepl.apps.rfc3696
 import pymysql
 import Conf
@@ -29,13 +28,12 @@ errors = []
 for UID in UIDs:
     body = server.fetch(UID, '(UID BODY[TEXT])')
     text = body[1][0][1]
-    email = re.search(b'To: ([^\s]+)', text)
-    email = email.group(1).decode()
+    email = Functions.get_email(text)
+    diagnostic_code = Functions.get_diagnostic_code(text)
     UID = UID.decode()
-    reason = Functions.reason(text)
 
     if emailValidator(email):
-        emails.append((UID, email, reason))
+        emails.append((UID, email, diagnostic_code))
     else:
         errors.append((UID, text.decode()))
 
@@ -44,12 +42,12 @@ sql = ''
 # emails
 if len(emails) > 0:
     i = 0
-    sql += 'INSERT INTO `emails` (`uid`, `email`, `reason`, `timestamp`) VALUES'
+    sql += 'INSERT INTO `emails` (`uid`, `email`, `diagnostic_code`, `timestamp`) VALUES'
 
-    for UID, email, reason in emails:
+    for UID, email, diagnostic_code in emails:
         if i > 0:
             sql += ", "
-        sql += "('%s', '%s', '%s', '%s')" % (UID, email, reason, dateForTimestamp)
+        sql += "('%s', '%s', '%s', '%s')" % (UID, email, diagnostic_code, dateForTimestamp)
         i += 1
 
     sql += ';'
