@@ -28,45 +28,46 @@ errors = []
 for UID in UIDs:
     body = server.fetch(UID, '(UID BODY[TEXT])')
     text = body[1][0][1]
+
+    UID = UID.decode()
     email = Functions.get_email(text)
     diagnostic_code = Functions.get_diagnostic_code(text)
-    UID = UID.decode()
 
     if emailValidator(email):
         emails.append((UID, email, diagnostic_code))
     else:
         errors.append((UID, text.decode()))
 
-sql = ''
+query = ''
 
 # emails
 if len(emails) > 0:
     i = 0
-    sql += 'INSERT INTO `emails` (`uid`, `email`, `diagnostic_code`, `timestamp`) VALUES'
+    query += 'INSERT INTO `emails` (`uid`, `email`, `diagnostic_code`, `timestamp`) VALUES'
 
     for UID, email, diagnostic_code in emails:
         if i > 0:
-            sql += ", "
-        sql += "('%s', '%s', '%s', '%s')" % (UID, email, diagnostic_code, dateForTimestamp)
+            query += ", "
+        query += "('%s', '%s', '%s', '%s')" % (UID, email, diagnostic_code, dateForTimestamp)
         i += 1
 
-    sql += ';'
+    query += ';'
 
 # errors
 if len(errors) > 0:
     i = 0
-    sql += 'INSERT INTO `errors` (`uid`, `timestamp`) VALUES'
+    query += 'INSERT INTO `errors` (`uid`, `timestamp`) VALUES'
 
     for UID, text in errors:
         if i > 0:
-            sql += ", "
-        sql += "('%s', '%s')" % (UID, dateForTimestamp)
+            query += ", "
+        query += "('%s', '%s')" % (UID, dateForTimestamp)
         i += 1
 
-    sql += ';'
+    query += ';'
 
 # sql
-if sql:
+if query:
     db = pymysql.connect(host=Conf.DB_HOST,
                          user=Conf.DB_USER,
                          passwd=Conf.DB_PASSWORD,
@@ -75,13 +76,12 @@ if sql:
     cursor = db.cursor()
 
     try:
-        cursor.execute(sql)
-    except:
-        print('%s ERROR! %s' % (dateForTimestamp, sql))
+        execute = cursor.execute(query)
+    except Exception as e:
+        print('################################## %s ##################################' % dateForTimestamp)
+        print('QUERY: %s \nERROR: %s \n' % (query, e))
         pass
 
     db.commit()
     db.close()
-else:
-    print('%s EMPTY sql' % (dateForTimestamp))
 

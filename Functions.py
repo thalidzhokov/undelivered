@@ -6,16 +6,23 @@ import re
 
 
 def get_email(text=''):
-    text = text.decode()
-    email = re.search('To: ([^\s]+)', text)
-    email = email.group(1)
-    print('To:', email)
+    email = re.search(b'To: ([^\s]+)', text)
+    email = email.group(1).decode()
+    email = str(email)
     return email
 
 
 def get_diagnostic_code(text=''):
-    text = text.decode()
-    diagnostic_code = re.search('Diagnostic-Code: (.+(\s.+\n){0,5})', text)
-    diagnostic_code = diagnostic_code.group(1)
-    print('Diagnostic-Code:', diagnostic_code)
+    diagnostic_code = re.search(b'Diagnostic-Code: (.+(\s.+\n){0,5})', text)
+    diagnostic_code = diagnostic_code.group(1).decode()
+    diagnostic_code = str(diagnostic_code)
+
+    edits = [('\r\n', ''),
+             ('\n', ''),
+             ('\s', '')]
+
+    for search, replace in edits:
+        diagnostic_code = diagnostic_code.replace(search, replace)
+
+    diagnostic_code = re.sub(' +', ' ', diagnostic_code)
     return diagnostic_code
