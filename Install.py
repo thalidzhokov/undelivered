@@ -27,6 +27,6 @@ db.commit()
 db.close()
 
 # Crontab
-crontab = '*/10 * * * * cd %s && /usr/bin/python Cron.py >> Cron.log' % (Conf.PATH)
-cmd = 'crontab -l | { cat; echo "%s"; } | crontab -' % (crontab)
+crontab = '*/10 * * * * cd %s && /usr/bin/python Cron.py >> Cron.log' % Conf.PATH
+cmd = 'crontab -l | { cat; echo "%s"; } | crontab -' % crontab
 os.system(cmd)
