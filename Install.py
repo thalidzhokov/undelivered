@@ -4,11 +4,14 @@
 # Imports
 import os
 import pymysql
+import datetime
 import Conf
+
+dateForTimestamp = '{:%Y-%m-%d %H:%M:%S}'.format(datetime.datetime.now())
 
 # MySQL
 file = open('Install.sql')
-sql = file.read()
+query = file.read()
 
 db = pymysql.connect(host=Conf.DB_HOST,
                      user=Conf.DB_USER,
@@ -18,9 +21,10 @@ db = pymysql.connect(host=Conf.DB_HOST,
 cursor = db.cursor()
 
 try:
-    cursor.execute(sql)
-except:
-    print('ERROR!', sql)
+    cursor.execute(query)
+except Exception as e:
+    print('################################## %s ##################################' % dateForTimestamp)
+    print('QUERY: %s \nERROR: %s \n' % (query, e))
     pass
 
 db.commit()
